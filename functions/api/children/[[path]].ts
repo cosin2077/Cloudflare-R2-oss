@@ -1,7 +1,9 @@
+import { getVisitAuth, Res401 } from "@/utils/auth";
 import { notFound, parseBucketPath } from "@/utils/bucket";
 
 export async function onRequestGet(context) {
   try {
+    if (!getVisitAuth(context)) return Res401();
     const [bucket, path] = parseBucketPath(context);
     const prefix = path && `${path}/`;
     if (!bucket || prefix.startsWith("_$flaredrive$/")) return notFound();
